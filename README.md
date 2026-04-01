@@ -14,7 +14,7 @@ Follow these steps to implement OpenMVG governance in your project:
 
 1. **Review the OpenMVG framework** to determine if it meets your project's needs.
 
-2. **Edit templates in ./project-repo directory or create required files** at the root of your repository: README.md, LICENSE, GOVERNANCE.md, CODE_OF_CONDUCT.md, SECURITY.md, CONTRIBUTING.md, ANTITRUST.md, MAINTAINERS.md, STEERING_COMMITTEE.md, TRADEMARKS.md, DCO (if using DCO) and AGENTS.md. If your project has multiple repositories, either include these files in each repository or maintain them in the primary repository (or the special `.github`/`.gitlab` repository) and reference them from other repositories. If using the template files, replace occurances of "project_name" with the name of your project and "project_repo" with the complete URL of your project repo. There are also other configurable values contained within square brackets '[]' which you will need to replace to customize the templates for your project's governance.
+2. **Configure the template files** in the `./project-repo` directory using one of the three setup methods described in the [Setting Up Your Templates](#setting-up-your-templates) section below. You can use an AI agent (AGENTSETUP.md), a Python script (SETUP.py), or edit the files manually -- all three approaches are documented with step-by-step instructions. Once complete, the files are ready to be placed at the root of your project repository.
 
 3. **Describe your project's mission** in the GOVERNANCE.md file and define your Technical Charter.  For LF Projects the charter will be the charter established during the formation process.
 
@@ -29,6 +29,111 @@ Follow these steps to implement OpenMVG governance in your project:
 8. **Set up compliance tooling** for DCO checks and license scanning.
 
 9. **Get to work.**
+
+---
+
+## Setting Up Your Templates
+
+The `project-repo/` directory contains all governance template files pre-populated with placeholder values. Two interactive setup methods are provided to configure them. Both methods prompt you for values section by section and write the results directly to the template files — no manual find-and-replace required.
+
+---
+
+### Method 1 — AI Agent Setup (AGENTSETUP.md)
+
+`AGENTSETUP.md` is the primary setup method and is part of the **Open Agent Installer** project — a standard for configuring open source project repositories through a conversational AI agent interface.
+
+**Compatible agents:** Claude (Claude Code), OpenAI Codex, OpenClaw, and any other agentic AI framework capable of reading and executing a Markdown instruction file.
+
+**How it works:**
+
+The agent reads `AGENTSETUP.md` in full, then guides you through each of the 18 configuration sections interactively — one section at a time. After collecting your answers, it performs all substitutions across the template files, verifies that no unresolved placeholders remain, and reports a summary of every change made.
+
+**To run:**
+
+In your AI agent session (e.g., Claude Code), navigate to the `OpenMVG/` directory and enter:
+
+```
+execute AGENTSETUP.md
+```
+
+The agent will prompt you for each value, pause for your input after each section, and complete all file edits automatically.
+
+**What it configures:** All 7 template files — `README.md`, `CONTRIBUTING.md`, `GOVERNANCE.md`, `MAINTAINERS.md`, `STEERING_COMMITTEE.md`, `SECURITY.md`, and `AGENTS.md`.
+
+**When to use this method:**
+- You are already working inside an AI agent session (Claude Code, Codex, etc.)
+- You want a guided, conversational setup experience
+- You prefer the agent to make all file edits on your behalf
+
+---
+
+### Method 2 — Python Script Setup (SETUP.py)
+
+`SETUP.py` is a standalone Python 3 script that replicates the full `AGENTSETUP.md` workflow without requiring an AI agent. It is ideal for automated pipelines, CI environments, or users who prefer a traditional command-line interface.
+
+**Requirements:** Python 3.6 or later. No external dependencies.
+
+**How it works:**
+
+The script presents the same 18 configuration sections as `AGENTSETUP.md`, prompting you for each value at the terminal. Optional fields can be skipped by pressing Enter. After collecting all inputs, the script performs global and per-file substitutions, builds dynamic tables (TSC members, maintainers, supported versions), removes instructional placeholder text, and writes the updated files. A verification pass then checks for any remaining unresolved placeholders and prints a completion summary.
+
+**To run:**
+
+```bash
+cd OpenMVG/
+python3 SETUP.py
+```
+
+**What it configures:** Same 7 template files as Method 1.
+
+**When to use this method:**
+- You do not have access to an AI agent session
+- You want a repeatable, scriptable setup process
+- You are integrating template configuration into a CI/CD pipeline or automation workflow
+
+---
+
+### Method 3 -- Manual Setup
+
+If you prefer not to use an AI agent or the Python script, you can configure the template files by hand using any text editor.
+
+**Requirements:** Any text editor. No tools or dependencies required.
+
+**How it works:**
+
+Open each file in the `project-repo/` directory and perform the following substitutions:
+
+1. **Global replacements** -- In every template file, replace all occurrences of the literal token `project_name` with your project's name, and all occurrences of `project_repo` with the full URL of your project repository (e.g., `https://github.com/org/repo`). These tokens appear in headings, prose, URLs, email addresses, and code blocks -- all instances must be replaced.
+
+2. **Bracketed placeholders** -- Replace each value enclosed in square brackets `[]` with the appropriate content for your project. For example, replace `[version number]` with your current release version, `[calendar link]` with your TSC meeting calendar URL, and so on. The full list of placeholders and their meanings is documented in `AGENTSETUP.md`.
+
+3. **Dynamic tables** -- In `MAINTAINERS.md`, `STEERING_COMMITTEE.md`, and the Supported Versions table in `SECURITY.md`, replace the placeholder table rows (rows containing `[Full Name]`, `@[github_handle]`, `x.x.x`, etc.) with one row per actual member or version. Remove any unfilled template rows.
+
+4. **Instructional comments** -- Remove HTML comment blocks that contain setup instructions, such as `<!-- Brief description of what this project does -->`. These are authoring aids and should not appear in the published files.
+
+**Files to configure:** `README.md`, `CONTRIBUTING.md`, `GOVERNANCE.md`, `MAINTAINERS.md`, `STEERING_COMMITTEE.md`, `SECURITY.md`, and `AGENTS.md`. The files `CODE_OF_CONDUCT.md`, `ANTITRUST.md`, and `TRADEMARKS.md` are standard LF Projects documents and require no changes.
+
+**When to use this method:**
+- You prefer full control over every edit
+- You are making selective or partial changes to the templates
+- You are updating previously configured files rather than starting from scratch
+
+---
+
+### Comparison
+
+| | Method 1: AGENTSETUP.md | Method 2: SETUP.py | Method 3: Manual |
+|---|---|---|---|
+| **Interface** | Conversational AI agent | Terminal prompt | Text editor |
+| **Requires AI agent** | Yes | No | No |
+| **Requires Python** | No | Yes (3.6+) | No |
+| **Interactive** | Yes | Yes | No |
+| **Edits files automatically** | Yes | Yes | No -- user edits directly |
+| **Verifies output** | Yes | Yes | No -- user must verify |
+| **Skippable optional fields** | Yes | Yes | Yes |
+| **Best for** | Agent sessions | CLI / automation | Selective or partial edits |
+
+> **Note:** `AGENTSETUP.md` and `SETUP.py` should be **removed or archived** from your project repository after setup is complete. They are configuration tools, not project documentation.
 
 ---
 
@@ -67,6 +172,14 @@ Each repository MUST have a LICENSE file listing the primary license of the sour
 If the repository contains code or assets not under the primary license, they MUST be referenced in a THIRD-PARTY file, which lists the covered files and includes the full license text from SPDX.
 
 Projects SHOULD use SPDX short-form identifiers throughout the codebase.
+
+Recommended licenses are:
+  Software - MIT or Apache-2.0
+  Specifications or documents - CC-BY-4.0
+  Data - CDLA-Permissive-2.0
+  AI Models - OpenMDW-1.0
+
+- **Be Advised**: You MUST copy the contents of the license you choose to use and paste them into the LICENSE file manually.
 
 #### GOVERNANCE.md
 
