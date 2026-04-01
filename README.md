@@ -38,7 +38,7 @@ The `project-repo/` directory contains all governance template files pre-populat
 
 ---
 
-### Method 1 — AI Agent Setup (AGENTSETUP.md)
+### Method 1 -- AI Agent Setup (AGENTSETUP.md)
 
 `AGENTSETUP.md` is the primary setup method and is part of the **Open Agent Installer** project — a standard for configuring open source project repositories through a conversational AI agent interface.
 
@@ -67,7 +67,7 @@ The agent will prompt you for each value, pause for your input after each sectio
 
 ---
 
-### Method 2 — Python Script Setup (SETUP.py)
+### Method 2 -- Python Script Setup (SETUP.py)
 
 `SETUP.py` is a standalone Python 3 script that replicates the full `AGENTSETUP.md` workflow without requiring an AI agent. It is ideal for automated pipelines, CI environments, or users who prefer a traditional command-line interface.
 
